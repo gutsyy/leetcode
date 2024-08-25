@@ -1,14 +1,22 @@
 import { test, expect } from "vitest";
 
 function countCharacters(words: string[], chars: string): number {
+  const charsMap = {};
+
+  for (const c of chars) {
+    if (charsMap[c]) {
+      charsMap[c] += 1;
+    } else {
+      charsMap[c] = 1;
+    }
+  }
+
   const isRecognize = (word: string) => {
-    let _chars: string = chars;
+    const clonedMap = { ...charsMap };
     for (const char of word) {
-      const searchIndex = _chars.indexOf(char);
+      if (!clonedMap[char]) return false;
 
-      if (searchIndex === -1) return false;
-
-      _chars = `${_chars.slice(0, searchIndex)}${_chars.slice(searchIndex + 1)}`;
+      clonedMap[char] -= 1;
     }
 
     return true;
