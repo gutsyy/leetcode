@@ -1,57 +1,39 @@
 import { test, expect } from "vitest";
 
 function searchRange(nums: number[], target: number): number[] {
-  if (!nums.length) return [-1, -1];
+  const biSelection = (isLeft: boolean) => {
+    let low = 0,
+      high = nums.length - 1,
+      res = -1;
 
-  let minIndex = Number.MAX_SAFE_INTEGER;
+    while (low <= high) {
+      const mid = Math.floor((high + low) / 2);
 
-  let maxIndex = -1;
-
-  const biSection = (startIndex: number, endIndex: number) => {
-    if (startIndex > endIndex) return;
-
-    if (nums[startIndex] < target && nums[endIndex] < target) return;
-
-    if (nums[startIndex] > target && nums[endIndex] > target) return;
-
-    const isEven = (startIndex + endIndex) % 2 === 0;
-
-    if (!isEven) {
-      const [left, right] = (function () {
-        const index = (startIndex + endIndex + 1) / 2;
-
-        return [index - 1, index] as const;
-      })();
-
-      if (nums[right] <= target) {
-        biSection(right, endIndex);
-      }
-      if (nums[left] >= target) {
-        biSection(startIndex, left);
+      if (nums[mid] === target) {
+        res = mid;
+        if (isLeft) {
+          high = mid - 1;
+        } else {
+          low = mid + 1;
+        }
       }
 
-      return;
+      if (nums[mid] > target) {
+        high = mid - 1;
+      }
+
+      if (nums[mid] < target) {
+        low = mid + 1;
+      }
     }
 
-    const midIndex = (startIndex + endIndex) / 2;
-
-    if (nums[midIndex] === target) {
-      minIndex = Math.min(minIndex, midIndex);
-      maxIndex = Math.max(maxIndex, midIndex);
-    }
-
-    if (nums[midIndex] >= target && startIndex !== endIndex) {
-      biSection(startIndex, midIndex);
-    }
-
-    if (nums[midIndex] <= target && startIndex !== endIndex) {
-      biSection(midIndex, endIndex);
-    }
+    return res;
   };
 
-  biSection(0, nums.length - 1);
+  const left = biSelection(true);
+  const right = biSelection(false);
 
-  return [minIndex === Number.MAX_SAFE_INTEGER ? -1 : minIndex, maxIndex];
+  return [left, right];
 }
 
 test("examples", () => {
