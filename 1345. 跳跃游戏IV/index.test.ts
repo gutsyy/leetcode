@@ -10,9 +10,11 @@ function minJumps(arr: number[]): number {
   for (let i = 0; i < arr.length; i++) {
     const key = arr[i];
 
-    const indexArr = map.get(key) ?? [];
+    if (!map.has(key)) {
+      map.set(key, []);
+    }
 
-    map.set(key, [...indexArr, i]);
+    map.get(key)!.push(i);
   }
 
   let startQueue = new Set([0]);
