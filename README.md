@@ -1,5 +1,6 @@
 # Git commit infos
 
+- timeout
 - solution: Completed leetcode problem - Solved independently with good performance
 - optimization: Completed leetcode problem - Solved independently, performance needs optimization
 - hint: Completed leetcode problem - Resolved after receiving hints from GPT
